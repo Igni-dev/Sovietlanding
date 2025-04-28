@@ -4,6 +4,23 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
 		<title>UssrLander</title>
+
+		<script type="text/javascript">
+			window.Telegram = {
+				WebApp: {
+					initData: 'your_data',
+					initDataUnsafe: {
+						user: {
+							id: 'user_id',
+							first_name: 'user_first_name',
+							username: 'user_username'
+						}
+					}
+				}
+			};
+		</script>
+		<script type="text/javascript" src="godot.javascript_release.js"></script>
+
 		<style>
 html, body, #canvas {
 	margin: 0;
@@ -111,7 +128,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12304,"index.wasm":52126319},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12256,"index.wasm":52126319},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
