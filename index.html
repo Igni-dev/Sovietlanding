@@ -4,23 +4,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
 		<title>UssrLander</title>
-
-		<script type="text/javascript">
-			window.Telegram = {
-				WebApp: {
-					initData: 'your_data',
-					initDataUnsafe: {
-						user: {
-							id: 'user_id',
-							first_name: 'user_first_name',
-							username: 'user_username'
-						}
-					}
-				}
-			};
-		</script>
-		<script type="text/javascript" src="godot.javascript_release.js"></script>
-
 		<style>
 html, body, #canvas {
 	margin: 0;
@@ -110,6 +93,22 @@ body {
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script>
+		let tg_data = null;
+
+		window.getTelegramUsername = function () {
+		try {
+			if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe?.user) {
+				return Telegram.WebApp.initDataUnsafe.user.username || "NoName";
+			}
+		} catch (e) {
+			console.warn("Telegram username fetch error:", e);
+		}
+			return "NoName";
+		};
+	</script>
+
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -128,7 +127,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12256,"index.wasm":52126319},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12048,"index.wasm":52126319},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
