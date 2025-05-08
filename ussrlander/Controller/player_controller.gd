@@ -13,22 +13,24 @@ var target_end_position := Vector3()
 
 func _process(delta: float) -> void:
 	if grabbed_object:
-		DebugDraw3D.draw_sphere(target_start_position, 0.2, Color.RED)
-		update_mouse_target_end_position(mouse_position)
-		DebugDraw3D.draw_sphere(target_end_position, 0.2, Color.GREEN)
-		DebugDraw3D.draw_line(target_start_position, target_end_position, Color.RED)
+		update_mouse_end_control_position(mouse_position)
+		ControlManager.set_control_vector(target_start_position, target_end_position)
 		
 func _input(event: InputEvent) -> void:
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		mouse_position = event.position
 		if grabbed_object == null:
-			update_mouse_target_start_position(mouse_position)
+			update_mouse_start_control_position(mouse_position)
+			if grabbed_object:
+				ControlManager.set_control_started(target_start_position)
 	else:
+		if grabbed_object:
+			ControlManager.set_control_ended(target_end_position)
 		grabbed_object = null
 			
-func update_mouse_target_start_position(m_pos: Vector2):
-	var start = get_viewport().get_camera_3d().project_ray_origin(m_pos)
-	var end = get_viewport().get_camera_3d().project_position(m_pos, DIST)
+func update_mouse_start_control_position(m_start_pos: Vector2):
+	var start = get_viewport().get_camera_3d().project_ray_origin(m_start_pos)
+	var end = get_viewport().get_camera_3d().project_position(m_start_pos, DIST)
 	var query = PhysicsRayQueryParameters3D.create(start, end)
 	
 	var space_state = get_world_3d().direct_space_state
@@ -37,9 +39,9 @@ func update_mouse_target_start_position(m_pos: Vector2):
 		grabbed_object = result.collider
 		target_start_position = result.position
 
-func update_mouse_target_end_position(m_pos: Vector2):
-	var start = get_viewport().get_camera_3d().project_ray_origin(m_pos)
-	var end = get_viewport().get_camera_3d().project_position(m_pos, DIST)
+func update_mouse_end_control_position(m_end_pos: Vector2):
+	var start = get_viewport().get_camera_3d().project_ray_origin(m_end_pos)
+	var end = get_viewport().get_camera_3d().project_position(m_end_pos, DIST)
 	
 	var plane_origin = target_start_position - CONTROL_PLANE_NORMAL * CONTROL_PLANE_POINT_OFFSET
 	var plane = Plane(CONTROL_PLANE_NORMAL, target_start_position.y)

@@ -15,6 +15,10 @@ run/main_scene="uid://c6lj336vdc1pu"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+ControlManager="*res://Controller/control_manager.gd"
+
 [rendering]
 
 renderer/rendering_method="mobile"
