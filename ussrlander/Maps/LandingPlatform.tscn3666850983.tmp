@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://c6lj336vdc1pu"]
+
+[ext_resource type="PackedScene" uid="uid://nkk6yfh7g1ff" path="res://rocket/rocket.tscn" id="1_2mewr"]
+[ext_resource type="Script" uid="uid://dcao7nsihqvqn" path="res://Maps/landing_platform.gd" id="1_2sbpv"]
+[ext_resource type="Script" uid="uid://d4n0uigprm6lv" path="res://Maps/ui.gd" id="3_2j8tm"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ubfnw"]
+size = Vector2(50, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2mewr"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2sbpv"]
+
+[node name="LandingPlatform" type="Node3D"]
+script = ExtResource("1_2sbpv")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_ubfnw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.489824, 0)
+shape = SubResource("BoxShape3D_2mewr")
+
+[node name="MeshTarget" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_2sbpv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.792375, 0.610035, 0, -0.610035, 0.792375, -24.3765, 21.5992, 23.1837)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.539288, 0.457349, 0, 0.64679, 0.762668, -0.707107, -0.539288, 0.457349, 5.761, 10, 5.833)
+
+[node name="Rocket" parent="." instance=ExtResource("1_2mewr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.235, 0)
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_2j8tm")
+
+[node name="PlayerNameL" type="Label" parent="UI"]
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 80.0
+offset_bottom = 43.0
+text = "Name: no name"
+
+[node name="SpeedL" type="Label" parent="UI"]
+offset_left = 40.0
+offset_top = 45.0
+offset_right = 153.0
+offset_bottom = 68.0
+text = "Speed: 0 m/s"
