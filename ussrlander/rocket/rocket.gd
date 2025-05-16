@@ -3,20 +3,8 @@ extends RigidBody3D
 # https://github.com/DmitriySalnikov/godot_debug_draw_3d
 # todo: https://www.youtube.com/watch?v=5Uc9yzj4YLY
 
-# Параметры управления
-@export var thrust_force: float = 5.0
-@export var rotation_speed: float = 0.1
-
-
-# start sprint control
-var is_hit_rocket := false
-var pulling := false
-var pull_start := Vector3.ZERO
-var pull_end := Vector3.ZERO
-
 var local_start_control_vector := Vector3.ZERO
-var start_control_vector := Vector3.ZERO
-var end_control_vector := Vector3.ZERO
+var local_end_control_vector := Vector3.ZERO
 
 const STABILIZER_FORCE = 0.5
 const MAX_ANGULAR_SPEED = 1.5
@@ -36,30 +24,47 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 	return
 
 func _process(delta: float) -> void:
+	
+	if local_start_control_vector.is_equal_approx(Vector3.ZERO) \
+		or local_end_control_vector.is_equal_approx(Vector3.ZERO):
+		return
+	# hack to normilize high
+	#local_end_control_vector.y = local_start_control_vector.y
 	var global_start_point = global_transform * local_start_control_vector
-	var control_vector = end_control_vector - global_start_point
-	var force_strength = control_vector.length() * 2.0
+	var global_end_point = global_transform * local_end_control_vector
+	var control_vector = global_end_point - global_start_point
+	var force_strength = control_vector.length() * 0.2
 	var direction = control_vector.normalized()
 	var final_force = direction * force_strength
-	#apply_central_force(final_force)
+
 	apply_force(final_force, global_transform.affine_inverse() * global_start_point)
 	
-	DebugDraw3D.draw_sphere(start_control_vector, 0.2, Color.RED)
-	DebugDraw3D.draw_sphere(end_control_vector, 0.2, Color.GREEN)
-	DebugDraw3D.draw_line(end_control_vector, global_start_point, Color.RED)
+	DebugDraw3D.draw_sphere(global_start_point, 0.1, Color.GREEN)
+	DebugDraw3D.draw_sphere(global_end_point, 0.1, Color.PURPLE)
+	var LineColor = Color.RED
 	
-	DebugDraw3D.draw_sphere(global_start_point, 0.2, Color.PURPLE)
+	if local_start_control_vector.y == local_end_control_vector.y:
+		LineColor = Color.GREEN
+	DebugDraw3D.draw_line(global_end_point, global_start_point, LineColor)
+	
+	var arrow_size = 0.2
+	var arrow_scale = 2
+	DebugDraw3D.draw_arrow(global_start_point, global_start_point + Vector3.UP * arrow_scale, Color.GREEN, arrow_size)
+	DebugDraw3D.draw_arrow(global_start_point, global_start_point + Vector3.FORWARD * arrow_scale, Color.RED, arrow_size)
+	DebugDraw3D.draw_arrow(global_start_point, global_start_point + Vector3.RIGHT * arrow_scale, Color.BLUE, arrow_size)
+	
+	DebugDraw3D.draw_arrow(global_end_point, global_end_point + Vector3.UP * arrow_scale, Color.GREEN, arrow_size)
+	DebugDraw3D.draw_arrow(global_end_point, global_end_point + Vector3.FORWARD * arrow_scale, Color.RED, arrow_size)
+	DebugDraw3D.draw_arrow(global_end_point, global_end_point + Vector3.RIGHT * arrow_scale, Color.BLUE, arrow_size)
 
 func _on_control_vector_started(in_start_control_vector: Vector3):
-	print("_on_control_vector_started")
+	#print("_on_control_vector_started")
 	local_start_control_vector = to_local(in_start_control_vector)
 	
 func _on_control_vector_ended(in_end_control_vector: Vector3):
-	print("_on_control_vector_ended")
+	#print("_on_control_vector_ended")
 	local_start_control_vector = Vector3.ZERO
-	start_control_vector = Vector3.ZERO
-	end_control_vector = Vector3.ZERO
+	local_end_control_vector = Vector3.ZERO
 
 func _on_control_vector_updated(in_start_control_vector: Vector3, in_end_control_vector: Vector3):
-	start_control_vector = in_start_control_vector
-	end_control_vector = in_end_control_vector
+	local_end_control_vector = to_local(in_end_control_vector)

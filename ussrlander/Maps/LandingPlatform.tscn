@@ -1,15 +1,13 @@
 [gd_scene load_steps=8 format=3 uid="uid://c6lj336vdc1pu"]
 
 [ext_resource type="PackedScene" uid="uid://nkk6yfh7g1ff" path="res://rocket/rocket.tscn" id="1_2mewr"]
-[ext_resource type="Script" uid="uid://dcao7nsihqvqn" path="res://Maps/landing_platform.gd" id="1_2sbpv"]
+[ext_resource type="Script" uid="uid://dcao7nsihqvqn" path="res://Maps/main.gd" id="1_2sbpv"]
+[ext_resource type="Script" uid="uid://5f4s345wibe4" path="res://Camera/camera_3d.gd" id="2_6pww6"]
 [ext_resource type="Script" uid="uid://d4n0uigprm6lv" path="res://Maps/ui.gd" id="3_2j8tm"]
 [ext_resource type="Script" uid="uid://c4uo1uvvtpa1r" path="res://Controller/player_controller.gd" id="4_cb6u4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_ubfnw"]
-size = Vector2(10, 10)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_2mewr"]
-size = Vector3(50, 1, 50)
+size = Vector3(10, 1, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2sbpv"]
 
@@ -17,29 +15,20 @@ size = Vector3(50, 1, 50)
 script = ExtResource("1_2sbpv")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-collision_layer = 0
-collision_mask = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-mesh = SubResource("PlaneMesh_ubfnw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.489824, 0)
 shape = SubResource("BoxShape3D_2mewr")
 
 [node name="MeshTarget" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.581593, 0)
 mesh = SubResource("BoxMesh_2sbpv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.792375, 0.610035, 0, -0.610035, 0.792375, -24.3765, 21.5992, 23.1837)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.707107, -0.539288, 0.457349, 0, 0.64679, 0.762668, -0.707107, -0.539288, 0.457349, 5.761, 10, 5.833)
-cull_mask = 1047553
-far = 3853.3
-
 [node name="Rocket" parent="." instance=ExtResource("1_2mewr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.46021, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.2449, 0)
+mass = 1.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("3_2j8tm")
@@ -60,3 +49,10 @@ text = "Speed: 0 m/s"
 
 [node name="PlayerController" type="Node3D" parent="."]
 script = ExtResource("4_cb6u4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.539288, 0.45735, 0, 0.64679, 0.762668, -0.707107, -0.539288, 0.45735, 5.761, 17.9961, 5.833)
+cull_mask = 1047553
+fov = 40.0
+far = 3853.3
+script = ExtResource("2_6pww6")
