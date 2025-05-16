@@ -16,10 +16,10 @@ func _ready() -> void:
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _process(delta: float) -> void:
+	print(global_transform.origin)
 	if not rocket:
 		return
-	
-	global_transform.origin = rocket.global_transform.origin + offset
+	#global_transform.origin = rocket.global_transform.origin + offset
 	
 	
 func set_offset(target: Node3D):

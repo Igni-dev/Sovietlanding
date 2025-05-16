@@ -5,6 +5,7 @@ extends RigidBody3D
 
 var local_start_control_vector := Vector3.ZERO
 var local_end_control_vector := Vector3.ZERO
+var global_end_control_vector := Vector3.ZERO
 
 const STABILIZER_FORCE = 0.5
 const MAX_ANGULAR_SPEED = 1.5
@@ -31,7 +32,11 @@ func _process(delta: float) -> void:
 	# hack to normilize high
 	#local_end_control_vector.y = local_start_control_vector.y
 	var global_start_point = global_transform * local_start_control_vector
-	var global_end_point = global_transform * local_end_control_vector
+	
+	# use origin global end point from the input.
+	# do not convert it in local space. global_transform went byzzeng.
+	#var global_end_point = global_transform * local_end_control_vector
+	var global_end_point = global_end_control_vector
 	var control_vector = global_end_point - global_start_point
 	var force_strength = control_vector.length() * 0.2
 	var direction = control_vector.normalized()
@@ -68,3 +73,4 @@ func _on_control_vector_ended(in_end_control_vector: Vector3):
 
 func _on_control_vector_updated(in_start_control_vector: Vector3, in_end_control_vector: Vector3):
 	local_end_control_vector = to_local(in_end_control_vector)
+	global_end_control_vector = in_end_control_vector

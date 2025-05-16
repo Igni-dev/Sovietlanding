@@ -54,5 +54,4 @@ script = ExtResource("4_cb6u4")
 transform = Transform3D(0.707107, -0.539288, 0.45735, 0, 0.64679, 0.762668, -0.707107, -0.539288, 0.45735, 5.761, 17.9961, 5.833)
 cull_mask = 1047553
 fov = 40.0
-far = 3853.3
 script = ExtResource("2_6pww6")

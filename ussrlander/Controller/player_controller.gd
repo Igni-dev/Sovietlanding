@@ -1,3 +1,5 @@
+# https://forum.godotengine.org/t/how-to-get-3d-position-of-the-mouse-cursor/28741/2
+
 extends Node3D
 
 const DIST = 1000
@@ -19,9 +21,6 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		mouse_position = event.position
-		#if grabbed_object:
-		#	update_mouse_end_control_position(mouse_position)
-		#	ControlManager.set_control_vector(target_start_position, target_end_position)
 		if grabbed_object == null:
 			update_mouse_start_control_position(mouse_position)
 			if grabbed_object:
@@ -42,20 +41,13 @@ func update_mouse_start_control_position(m_start_pos: Vector2):
 		grabbed_object = result.collider
 		target_start_position = result.position
 
-func update_mouse_end_control_position(mouse_pos: Vector2):
-	#var start = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
-	#var end = get_viewport().get_camera_3d().project_position(mouse_pos, DIST)
-	#var plane = Plane(CONTROL_PLANE_NORMAL, target_start_position.y)
-	#var intersection = plane.intersects_ray(start, end)		
-	#if intersection:
-		#target_end_position = intersection
-		#print(plane, target_start_position, target_end_position)
-		#var control_vector = target_start_position - target_end_position
-		
+func update_mouse_end_control_position(mouse_pos: Vector2):		
 	var plane = Plane(Vector3.UP, target_start_position.y)
 	var ray_origin = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
 	var ray_direction = get_viewport().get_camera_3d().project_ray_normal(mouse_pos)
 	var end_point = plane.intersects_ray(ray_origin, ray_direction)
 	if end_point:
 		target_end_position = end_point
-		print(plane, target_start_position, end_point)
+		#print(plane, end_point)
+		#DebugDraw3D.draw_plane(plane, Color.CORNFLOWER_BLUE, target_start_position)
+		
